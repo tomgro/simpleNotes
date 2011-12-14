@@ -8,6 +8,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -28,6 +29,7 @@ public class EditActivity extends Activity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.editnote);
+		
 
 		noteListView = (ListView) findViewById(R.id.editListView);
 
@@ -45,6 +47,8 @@ public class EditActivity extends Activity {
 			if (sdel.equals("delete"))
 				del = true;
 		}
+		
+		if(del) setTitle("Delete");
 
 		noteListView.setOnItemClickListener(new OnItemClickListener() {
 			@Override
@@ -53,7 +57,8 @@ public class EditActivity extends Activity {
 
 				if (del) {
 					myDBAdapter.deleteNote(Long.parseLong(notes.get(pos).getId()));
-					self.finish();
+					//self.finish();
+					refreshView();
 				} else {
 					Intent i1 = new Intent(EditActivity.this, NewActivity.class);
 					i1.putExtra("note", (Serializable) notes.get(pos));
@@ -67,7 +72,21 @@ public class EditActivity extends Activity {
 		});
 
 	}
+	
+	@Override
+	protected void onResume() {
+		// TODO Auto-generated method stub
+		super.onResume();
+		refreshView();
+	}
 
+	
+	public void refreshView() {
+		// TODO Auto-generated method stub
+		fillNotesList();
+		fillListView();
+	}
+	
 	private void fillNotesList() {
 		noteCursor = myDBAdapter.getAllEntries();
 		startManagingCursor(noteCursor);

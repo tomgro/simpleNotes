@@ -5,6 +5,8 @@ import java.security.Timestamp;
 import java.util.Calendar;
 import java.util.Date;
 
+import pl.oke.tools.Utils;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -38,9 +40,11 @@ public class NewActivity extends Activity implements OnClickListener {
 	        //Log.i( "dd","Extra:" + extras.getString("note") );
 	    	note = (Note)extras.getSerializable("note");
 	    	et.setText(note.getContent());
-	    	
+	    	et.setSelection(note.getContent().length());
 	    }
 	}
+	
+	
 
 	public void onClick(View v) {
 		switch (v.getId()) {
@@ -48,10 +52,14 @@ public class NewActivity extends Activity implements OnClickListener {
 			String content = et.getText().toString();
 			long ts = new Date().getTime();
 			myDBAdapter.open();
-			if(note==null)
-				myDBAdapter.insertNote(new Note(content, Long.toString(ts)));
-			else 
+			
+			if(note==null) {
+				if(!Utils.isEmpty(content))
+					myDBAdapter.insertNote(new Note(content, Long.toString(ts)));
+			} else {
+				if(Utils.isEmpty(content)) content=(String)getResources().getString(R.string.empty);
 				myDBAdapter.updateNote(Long.parseLong(note.getId()), new Note(content, Long.toString(ts)));
+			}
 		
 			myDBAdapter.close();
 			this.finish();

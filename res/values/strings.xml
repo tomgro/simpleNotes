@@ -9,8 +9,9 @@
     <string name="exit_label">Exit</string>
     <string name="save">Save</string>
     <string name="cancel">Cancel</string>
+    <string name="empty">You have created empty note!</string>
     <string name="about_title">About Simple Notes</string>
     <string name="about_text">\
-The Simple Notes <i>application</i> was created by TG.
+The Simple Notes <i>application</i> was created by TG. Version 1.0
     </string>
 </resources>
