@@ -5,6 +5,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -14,6 +17,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.ArrayAdapter;
@@ -30,6 +34,8 @@ public class EditActivity extends Activity {
 	boolean del = false;
 	boolean list = false;
 	EditActivity self = this;
+	static final private int ALERT_DIALOG_BUTTONS = 2;
+	Note selectedNote = null;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -59,7 +65,7 @@ public class EditActivity extends Activity {
 			setTitle("Delete");
 		if (list) {
 			setTitle("List");
-			
+
 		}
 		registerForContextMenu(noteListView);
 
@@ -88,49 +94,98 @@ public class EditActivity extends Activity {
 		});
 
 	}
-	
+
 	@Override
-    public boolean onContextItemSelected(MenuItem item) {
-        AdapterContextMenuInfo info = (AdapterContextMenuInfo)item.getMenuInfo();
-         
-        switch (item.getItemId()) {
-        case R.id.cm_edit:
-        	Intent i1 = new Intent(EditActivity.this, NewActivity.class);
+	public boolean onContextItemSelected(MenuItem item) {
+		AdapterContextMenuInfo info = (AdapterContextMenuInfo) item
+				.getMenuInfo();
+
+		switch (item.getItemId()) {
+		case R.id.cm_edit:
+			Intent i1 = new Intent(EditActivity.this, NewActivity.class);
 			i1.putExtra("note", (Serializable) notes.get(info.position));
 			startActivity(i1);
-            //Toast.makeText(getApplicationContext(), 
-             //       "Opcja item01 na elemencie: " + shortcuts.get(info.position), 
-             //       Toast.LENGTH_LONG).show();
-            break;
-             
-        case R.id.cm_delete:
-        	myDBAdapter.deleteNote(Long.parseLong(notes.get(info.position)
-					.getId()));
-			// self.finish();
-			refreshView();
-           // Toast.makeText(getApplicationContext(), 
-            //        "Opcja item02 na elemencie: " + shortcuts.get(info.position), 
-            //        Toast.LENGTH_LONG).show();
-            break;
-             
-        default:
-            break;
-        }
-        return true;
-    }
- 
-    @Override
-    public void onCreateContextMenu(ContextMenu menu, View v,
-            ContextMenuInfo menuInfo) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.context_menu, menu);
-        
-         
-        AdapterContextMenuInfo info = (AdapterContextMenuInfo) menuInfo;
-         
-        menu.setHeaderTitle(shortcuts.get(info.position));
-         
-    }
+			// Toast.makeText(getApplicationContext(),
+			// "Opcja item01 na elemencie: " + shortcuts.get(info.position),
+			// Toast.LENGTH_LONG).show();
+			break;
+
+		case R.id.cm_delete:
+			// item.setOnMenuItemClickListener(self.onCreateDialog(ALERT_DIALOG_BUTTONS));
+
+			showDialog(ALERT_DIALOG_BUTTONS);
+			// onCreateDialog(ALERT_DIALOG_BUTTONS);
+			selectedNote = notes.get(info.position);
+
+			// Toast.makeText(getApplicationContext(),
+			// "Opcja item02 na elemencie: " + shortcuts.get(info.position),
+			// Toast.LENGTH_LONG).show();
+			break;
+
+		default:
+			break;
+		}
+		return true;
+	}
+
+	/*
+	 * private OnClickListener listener = new OnClickListener() {
+	 * 
+	 * @Override public void onClick(View v) { if(v ==
+	 * (Button)findViewById(R.id.btnNewAlertDialogButton))
+	 * showDialog(ALERT_DIALOG_BUTTONS);
+	 * 
+	 * } };
+	 */
+
+	@Override
+	protected Dialog onCreateDialog(int id) {
+		Dialog dialog;
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		switch (id) {
+
+		case ALERT_DIALOG_BUTTONS:
+			// Okno dialogowe z przyciskami
+			builder.setTitle("Delete note");
+			builder.setMessage("Are you sure?");
+			builder.setCancelable(false);
+
+			builder.setPositiveButton("Yes", new Dialog.OnClickListener() {
+				@Override
+				public void onClick(DialogInterface arg0, int arg1) {
+					myDBAdapter.deleteNote(Long.parseLong(selectedNote.getId()));
+
+					refreshView();
+				}
+			});
+			builder.setNegativeButton("No", new Dialog.OnClickListener() {
+				@Override
+				public void onClick(DialogInterface arg0, int arg1) {
+
+				}
+			});
+
+			dialog = builder.create();
+			break;
+
+		default:
+			dialog = null;
+			break;
+		}
+		return dialog;
+	}
+
+	@Override
+	public void onCreateContextMenu(ContextMenu menu, View v,
+			ContextMenuInfo menuInfo) {
+		MenuInflater inflater = getMenuInflater();
+		inflater.inflate(R.menu.context_menu, menu);
+
+		AdapterContextMenuInfo info = (AdapterContextMenuInfo) menuInfo;
+
+		menu.setHeaderTitle(shortcuts.get(info.position));
+
+	}
 
 	@Override
 	protected void onResume() {
@@ -170,7 +225,8 @@ public class EditActivity extends Activity {
 		}
 	}
 
-	List<String> shortcuts=null;
+	List<String> shortcuts = null;
+
 	private void fillListView() {
 		shortcuts = new ArrayList<String>();
 		for (Note note : notes) {
