@@ -1,6 +1,8 @@
 package pl.oke;
 
 import android.app.Activity;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Bundle;
 
 public class AboutActivity extends Activity {
@@ -8,6 +10,19 @@ public class AboutActivity extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.about);
+        
+        PackageInfo pinfo;
+		try {
+			pinfo = getPackageManager().getPackageInfo(getPackageName(), 0);
+			// TODO
+			int versionNumber = pinfo.versionCode;
+	        String versionName = pinfo.versionName;
+	        String about = (String)getResources().getString(R.string.about_text);
+	        
+		} catch (NameNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		setContentView(R.layout.about);
     }
 }

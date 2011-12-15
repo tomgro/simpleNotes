@@ -5,20 +5,20 @@
     android:orientation="horizontal" >
 
     <LinearLayout android:orientation="vertical"
-        android:layout_height="wrap_content" android:layout_width="fill_parent"
+        android:layout_height="fill_parent" android:layout_width="fill_parent"
         >
 
     <EditText
         android:id="@+id/editText1"
         android:layout_width="match_parent"
-        android:layout_height="376dp"
+        android:layout_height="match_parent"
         android:gravity="top|left"
         android:inputType="textMultiLine"
         android:scrollHorizontally="false" >
 
         <requestFocus />
     </EditText>
-	<LinearLayout android:orientation="horizontal"
+<!-- 	<LinearLayout android:orientation="horizontal"
         android:layout_height="wrap_content" android:layout_width="fill_parent"
         >
     <Button
@@ -33,7 +33,7 @@
         android:layout_height="108dp"
         android:text="@string/cancel" />
     </LinearLayout>
-
+ -->
     </LinearLayout>
 
 </LinearLayout>

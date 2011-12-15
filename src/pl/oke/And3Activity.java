@@ -16,6 +16,9 @@ public class And3Activity extends Activity implements OnClickListener {
 		View newnote = findViewById(R.id.new_button);
 		newnote.setOnClickListener(this);
 		
+		View listnote = findViewById(R.id.list_button);
+		listnote.setOnClickListener(this);
+		
 		View editnote = findViewById(R.id.edit_button);
 		editnote.setOnClickListener(this);
 		
@@ -35,6 +38,11 @@ public class And3Activity extends Activity implements OnClickListener {
 			Intent i1 = new Intent(this, NewActivity.class);
 			
 			startActivity(i1);
+			break;
+		case R.id.list_button:
+			Intent i5 = new Intent(this, EditActivity.class);
+			i5.putExtra("action", "list");
+			startActivity(i5);
 			break;
 		case R.id.edit_button:
 			Intent i2 = new Intent(this, EditActivity.class);

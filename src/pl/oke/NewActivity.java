@@ -26,11 +26,11 @@ public class NewActivity extends Activity implements OnClickListener {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.newnote);
         
-        View cancel = findViewById(R.id.new_cancel);
-		cancel.setOnClickListener(this);
+   //     View cancel = findViewById(R.id.new_cancel);
+	//	cancel.setOnClickListener(this);
 		
-		View save = findViewById(R.id.new_save);
-		save.setOnClickListener(this);
+	//	View save = findViewById(R.id.new_save);
+	//	save.setOnClickListener(this);
 		et = (EditText)findViewById(R.id.editText1);
 		myDBAdapter = new DatabaseAdapter(getApplicationContext());
 		
@@ -44,30 +44,40 @@ public class NewActivity extends Activity implements OnClickListener {
 	    }
 	}
 	
+	@Override
+	public void onBackPressed() {
+		// TODO Auto-generated method stub
+		super.onBackPressed();
+		addNewOrUpdate();
+	}
 	
-
+	private void addNewOrUpdate() {
+		String content = et.getText().toString();
+		long ts = new Date().getTime();
+		myDBAdapter.open();
+		
+		if(note==null) {
+			if(!Utils.isEmpty(content))
+				myDBAdapter.insertNote(new Note(content, Long.toString(ts)));
+		} else {
+			if(Utils.isEmpty(content)) content=(String)getResources().getString(R.string.empty);
+			myDBAdapter.updateNote(Long.parseLong(note.getId()), new Note(content, Long.toString(ts)));
+		}
+	
+		myDBAdapter.close();
+	}
+	
 	public void onClick(View v) {
 		switch (v.getId()) {
+		/*
 		case R.id.new_save:
-			String content = et.getText().toString();
-			long ts = new Date().getTime();
-			myDBAdapter.open();
-			
-			if(note==null) {
-				if(!Utils.isEmpty(content))
-					myDBAdapter.insertNote(new Note(content, Long.toString(ts)));
-			} else {
-				if(Utils.isEmpty(content)) content=(String)getResources().getString(R.string.empty);
-				myDBAdapter.updateNote(Long.parseLong(note.getId()), new Note(content, Long.toString(ts)));
-			}
-		
-			myDBAdapter.close();
+			addNewOrUpdate();
 			this.finish();
 			break;
 		case R.id.new_cancel:
 			this.finish();
 			break;
-
+*/
 		default:
 			break;
 		}

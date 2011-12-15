@@ -3,6 +3,7 @@
     <string name="app_name">Simple Notes</string>
     <string name="main_title">Simple Notes</string>
     <string name="new_label">New</string>
+    <string name="list_label">List</string>
     <string name="edit_label">Edit</string>
     <string name="delete_label">Delete</string>
     <string name="about_label">About</string>
@@ -12,6 +13,7 @@
     <string name="empty">You have created empty note!</string>
     <string name="about_title">About Simple Notes</string>
     <string name="about_text">\
-The Simple Notes <i>application</i> was created by TG. Version 1.0
+The Simple Notes <i>application</i> was created by TG.
     </string>
+    
 </resources>

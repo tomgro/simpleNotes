@@ -8,9 +8,14 @@ import android.app.Activity;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.view.ContextMenu;
+import android.view.ContextMenu.ContextMenuInfo;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.AdapterView.OnItemClickListener;
@@ -23,13 +28,13 @@ public class EditActivity extends Activity {
 	ListView noteListView;
 	List<Note> notes = new ArrayList<Note>();
 	boolean del = false;
-	EditActivity self=this;
-	
+	boolean list = false;
+	EditActivity self = this;
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.editnote);
-		
 
 		noteListView = (ListView) findViewById(R.id.editListView);
 
@@ -40,15 +45,23 @@ public class EditActivity extends Activity {
 		fillListView();
 
 		Bundle extras = getIntent().getExtras();
-		
+
 		if (extras != null) {
 			// Log.i( "dd","Extra:" + extras.getString("note") );
 			String sdel = extras.getString("action");
 			if (sdel.equals("delete"))
 				del = true;
+			if (sdel.equals("list"))
+				list = true;
 		}
-		
-		if(del) setTitle("Delete");
+
+		if (del)
+			setTitle("Delete");
+		if (list) {
+			setTitle("List");
+			
+		}
+		registerForContextMenu(noteListView);
 
 		noteListView.setOnItemClickListener(new OnItemClickListener() {
 			@Override
@@ -56,10 +69,13 @@ public class EditActivity extends Activity {
 					long arg3) {
 
 				if (del) {
-					myDBAdapter.deleteNote(Long.parseLong(notes.get(pos).getId()));
-					//self.finish();
+					myDBAdapter.deleteNote(Long.parseLong(notes.get(pos)
+							.getId()));
+					// self.finish();
 					refreshView();
-				} else {
+				} else if (list) {
+					// TODO
+				} else { // edit
 					Intent i1 = new Intent(EditActivity.this, NewActivity.class);
 					i1.putExtra("note", (Serializable) notes.get(pos));
 					startActivity(i1);
@@ -74,19 +90,61 @@ public class EditActivity extends Activity {
 	}
 	
 	@Override
+    public boolean onContextItemSelected(MenuItem item) {
+        AdapterContextMenuInfo info = (AdapterContextMenuInfo)item.getMenuInfo();
+         
+        switch (item.getItemId()) {
+        case R.id.cm_edit:
+        	Intent i1 = new Intent(EditActivity.this, NewActivity.class);
+			i1.putExtra("note", (Serializable) notes.get(info.position));
+			startActivity(i1);
+            //Toast.makeText(getApplicationContext(), 
+             //       "Opcja item01 na elemencie: " + shortcuts.get(info.position), 
+             //       Toast.LENGTH_LONG).show();
+            break;
+             
+        case R.id.cm_delete:
+        	myDBAdapter.deleteNote(Long.parseLong(notes.get(info.position)
+					.getId()));
+			// self.finish();
+			refreshView();
+           // Toast.makeText(getApplicationContext(), 
+            //        "Opcja item02 na elemencie: " + shortcuts.get(info.position), 
+            //        Toast.LENGTH_LONG).show();
+            break;
+             
+        default:
+            break;
+        }
+        return true;
+    }
+ 
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v,
+            ContextMenuInfo menuInfo) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.context_menu, menu);
+        
+         
+        AdapterContextMenuInfo info = (AdapterContextMenuInfo) menuInfo;
+         
+        menu.setHeaderTitle(shortcuts.get(info.position));
+         
+    }
+
+	@Override
 	protected void onResume() {
 		// TODO Auto-generated method stub
 		super.onResume();
 		refreshView();
 	}
 
-	
 	public void refreshView() {
 		// TODO Auto-generated method stub
 		fillNotesList();
 		fillListView();
 	}
-	
+
 	private void fillNotesList() {
 		noteCursor = myDBAdapter.getAllEntries();
 		startManagingCursor(noteCursor);
@@ -112,8 +170,9 @@ public class EditActivity extends Activity {
 		}
 	}
 
+	List<String> shortcuts=null;
 	private void fillListView() {
-		List<String> shortcuts = new ArrayList<String>();
+		shortcuts = new ArrayList<String>();
 		for (Note note : notes) {
 			String con = note.getContent();
 			if (con.length() > 20) {
