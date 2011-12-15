@@ -53,11 +53,10 @@ public class EditActivity extends Activity {
 		Bundle extras = getIntent().getExtras();
 
 		if (extras != null) {
-			// Log.i( "dd","Extra:" + extras.getString("note") );
-			String sdel = extras.getString("action");
-			if (sdel.equals("delete"))
+			String action = extras.getString("action");
+			if (action.equals("delete"))
 				del = true;
-			if (sdel.equals("list"))
+			if (action.equals("list"))
 				list = true;
 		}
 
@@ -65,7 +64,6 @@ public class EditActivity extends Activity {
 			setTitle("Delete");
 		if (list) {
 			setTitle("List");
-
 		}
 		registerForContextMenu(noteListView);
 
@@ -77,7 +75,6 @@ public class EditActivity extends Activity {
 				if (del) {
 					myDBAdapter.deleteNote(Long.parseLong(notes.get(pos)
 							.getId()));
-					// self.finish();
 					refreshView();
 				} else if (list) {
 					// TODO
@@ -87,9 +84,6 @@ public class EditActivity extends Activity {
 					startActivity(i1);
 					noteListView.invalidate();
 				}
-				// Toast.makeText(getApplicationContext(),
-				// notes.get(pos).getContent().toString(),
-				// Toast.LENGTH_SHORT).show();
 			}
 		});
 
@@ -105,21 +99,11 @@ public class EditActivity extends Activity {
 			Intent i1 = new Intent(EditActivity.this, NewActivity.class);
 			i1.putExtra("note", (Serializable) notes.get(info.position));
 			startActivity(i1);
-			// Toast.makeText(getApplicationContext(),
-			// "Opcja item01 na elemencie: " + shortcuts.get(info.position),
-			// Toast.LENGTH_LONG).show();
 			break;
 
 		case R.id.cm_delete:
-			// item.setOnMenuItemClickListener(self.onCreateDialog(ALERT_DIALOG_BUTTONS));
-
 			showDialog(ALERT_DIALOG_BUTTONS);
-			// onCreateDialog(ALERT_DIALOG_BUTTONS);
 			selectedNote = notes.get(info.position);
-
-			// Toast.makeText(getApplicationContext(),
-			// "Opcja item02 na elemencie: " + shortcuts.get(info.position),
-			// Toast.LENGTH_LONG).show();
 			break;
 
 		default:
@@ -128,15 +112,6 @@ public class EditActivity extends Activity {
 		return true;
 	}
 
-	/*
-	 * private OnClickListener listener = new OnClickListener() {
-	 * 
-	 * @Override public void onClick(View v) { if(v ==
-	 * (Button)findViewById(R.id.btnNewAlertDialogButton))
-	 * showDialog(ALERT_DIALOG_BUTTONS);
-	 * 
-	 * } };
-	 */
 
 	@Override
 	protected Dialog onCreateDialog(int id) {
@@ -180,22 +155,17 @@ public class EditActivity extends Activity {
 			ContextMenuInfo menuInfo) {
 		MenuInflater inflater = getMenuInflater();
 		inflater.inflate(R.menu.context_menu, menu);
-
 		AdapterContextMenuInfo info = (AdapterContextMenuInfo) menuInfo;
-
 		menu.setHeaderTitle(shortcuts.get(info.position));
-
 	}
 
 	@Override
 	protected void onResume() {
-		// TODO Auto-generated method stub
 		super.onResume();
 		refreshView();
 	}
 
 	public void refreshView() {
-		// TODO Auto-generated method stub
 		fillNotesList();
 		fillListView();
 	}
@@ -250,5 +220,4 @@ public class EditActivity extends Activity {
 		myDBAdapter.close();
 		super.onDestroy();
 	}
-
 }

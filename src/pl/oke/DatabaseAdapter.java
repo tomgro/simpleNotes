@@ -67,7 +67,7 @@ public class DatabaseAdapter {
 	}
 
 	public boolean updateNote(long _index, Note note) {
-		Log.d("update", "update " + _index + " content " +note.getContent());
+		Log.d("update", "update " + _index + " content " + note.getContent());
 		// Warunek wstawiany do klauzuli WHERE
 		String where = KEY_ID + "=" + _index;
 		// Tak samo jak przy metodzie insert
@@ -90,7 +90,7 @@ public class DatabaseAdapter {
 	// Pobieranie wszystki wpisów w postaci obiektu Cursor
 	public Cursor getAllEntries() {
 		String[] columns = { KEY_ID, KEY_CONTENT, KEY_LASTMOD };
-		String order=KEY_LASTMOD + " DESC";
+		String order = KEY_LASTMOD + " DESC";
 		return db.query(DB_TABLE, columns, null, null, null, null, order);
 	}
 
@@ -105,11 +105,9 @@ public class DatabaseAdapter {
 			cursor.moveToFirst();
 		}
 
-		Note note = new Note(cursor.getString(cursor
-				.getColumnIndex(KEY_ID)),
-				cursor.getString(cursor
-				.getColumnIndex(KEY_CONTENT)), cursor.getString(cursor
-				.getColumnIndex(KEY_LASTMOD)));
+		Note note = new Note(cursor.getString(cursor.getColumnIndex(KEY_ID)),
+				cursor.getString(cursor.getColumnIndex(KEY_CONTENT)),
+				cursor.getString(cursor.getColumnIndex(KEY_LASTMOD)));
 
 		return note;
 	}

@@ -14,7 +14,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.EditText;
 
-public class NewActivity extends Activity implements OnClickListener {
+public class NewActivity extends Activity {
 	EditText et = null;
 	DatabaseAdapter myDBAdapter = null;
 	Note note = null;
@@ -34,7 +34,6 @@ public class NewActivity extends Activity implements OnClickListener {
 		Bundle extras = getIntent().getExtras();
 		note = null;
 		if (extras != null) {
-			// Log.i( "dd","Extra:" + extras.getString("note") );
 			note = (Note) extras.getSerializable("note");
 			et.setText(note.getContent());
 			et.setSelection(note.getContent().length());
@@ -54,11 +53,9 @@ public class NewActivity extends Activity implements OnClickListener {
 
 	@Override
 	public void onBackPressed() {
-		// TODO Auto-generated method stub
 		super.onBackPressed();
 		addNewOrUpdate();
-
-		notif();
+		doNotify();
 		notification.number++;
 	}
 
@@ -80,7 +77,7 @@ public class NewActivity extends Activity implements OnClickListener {
 		myDBAdapter.close();
 	}
 
-	public void notif() {
+	public void doNotify() {
 		// Ustaw informacje wydarzenia
 		Context context = getApplicationContext();
 		String expandedNotificationTitle = "Simple Note message";

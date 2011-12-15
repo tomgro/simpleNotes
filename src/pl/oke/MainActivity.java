@@ -6,8 +6,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 
-public class And3Activity extends Activity implements OnClickListener {
-	/** Called when the activity is first created. */
+public class MainActivity extends Activity implements OnClickListener {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -15,13 +14,13 @@ public class And3Activity extends Activity implements OnClickListener {
 
 		View newnote = findViewById(R.id.new_button);
 		newnote.setOnClickListener(this);
-		
+
 		View listnote = findViewById(R.id.list_button);
 		listnote.setOnClickListener(this);
-		
+
 		View editnote = findViewById(R.id.edit_button);
 		editnote.setOnClickListener(this);
-		
+
 		View delnote = findViewById(R.id.delete_button);
 		delnote.setOnClickListener(this);
 
@@ -36,7 +35,6 @@ public class And3Activity extends Activity implements OnClickListener {
 		switch (v.getId()) {
 		case R.id.new_button:
 			Intent i1 = new Intent(this, NewActivity.class);
-			
 			startActivity(i1);
 			break;
 		case R.id.list_button:
