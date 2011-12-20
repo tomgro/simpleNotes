@@ -16,6 +16,7 @@ public final class R {
     public static final class drawable {
         public static final int btnbgnotnine=0x7f020000;
         public static final int ic_launcher=0x7f020001;
+        public static final int icon=0x7f020002;
     }
     public static final class id {
         public static final int about_button=0x7f070006;
@@ -44,6 +45,7 @@ public final class R {
         public static final int about_text=0x7f05000c;
         public static final int about_title=0x7f05000b;
         public static final int app_name=0x7f050000;
+        public static final int bar_notif_title=0x7f05000f;
         public static final int cancel=0x7f050009;
         public static final int delete_label=0x7f050005;
         public static final int edit_label=0x7f050004;
@@ -52,6 +54,8 @@ public final class R {
         public static final int list_label=0x7f050003;
         public static final int main_title=0x7f050001;
         public static final int new_label=0x7f050002;
+        public static final int notif_text=0x7f05000e;
+        public static final int notif_title=0x7f05000d;
         public static final int save=0x7f050008;
     }
 }

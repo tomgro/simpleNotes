@@ -61,9 +61,11 @@ public class EditActivity extends Activity {
 		}
 
 		if (del)
-			setTitle("Delete");
+			setTitle((String) getResources().getString(
+					R.string.delete_label));
 		if (list) {
-			setTitle("List");
+			setTitle((String) getResources().getString(
+					R.string.list_label));
 		}
 		registerForContextMenu(noteListView);
 

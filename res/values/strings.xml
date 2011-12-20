@@ -15,5 +15,8 @@
     <string name="about_text">\
 The Simple Notes <i>application</i> was created by TG.
     </string>
+    <string name="notif_title">Simple Note message</string>
+    <string name="notif_text">Note was saved</string>
+    <string name="bar_notif_title">Note was saved</string>
     
 </resources>

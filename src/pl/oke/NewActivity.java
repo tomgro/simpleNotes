@@ -44,7 +44,9 @@ public class NewActivity extends Activity {
 
 		// Stwórz powiadomienie
 		int ico = R.drawable.btnbgnotnine;
-		String notiticationTitle = "Note was saved";
+		// bar title
+		String notiticationTitle = (String) getResources().getString(
+				R.string.bar_notif_title);
 		long whenNotify = System.currentTimeMillis();
 
 		notification = new Notification(ico, notiticationTitle, whenNotify);
@@ -54,14 +56,16 @@ public class NewActivity extends Activity {
 	@Override
 	public void onBackPressed() {
 		super.onBackPressed();
-		addNewOrUpdate();
-		doNotify();
-		notification.number++;
+		if(addNewOrUpdate()) { 
+			doNotify();
+			notification.number++;
+		}
 	}
 
-	private void addNewOrUpdate() {
+	private boolean addNewOrUpdate() {
 		String content = et.getText().toString();
 		long ts = new Date().getTime();
+		if(Utils.isEmpty(content)) return false;
 		myDBAdapter.open();
 
 		if (note == null) {
@@ -75,13 +79,16 @@ public class NewActivity extends Activity {
 		}
 
 		myDBAdapter.close();
+		return true;
 	}
 
 	public void doNotify() {
 		// Ustaw informacje wydarzenia
 		Context context = getApplicationContext();
-		String expandedNotificationTitle = "Simple Note message";
-		String expandedNotificationText = "Note was saved";
+		String expandedNotificationTitle = (String) getResources().getString(
+				R.string.notif_title);
+		String expandedNotificationText = (String) getResources().getString(
+				R.string.notif_text);
 		Intent intent = new Intent(context, EditActivity.class);
 		PendingIntent pendingIntent = PendingIntent.getActivity(context, 0,
 				intent, 0);
